@@ -1,0 +1,1105 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>サービス全体モック</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+body{margin:0;font-family:'Noto Sans JP',sans-serif;color:#111;background:#fff}
+a.btn:hover{color:#fff;opacity:.85}
+a{color:#111}a:hover{color:#555}
+button,input,select{font-family:inherit}
+button,select{font-family:inherit}
+button,textarea{font-family:inherit}
+button{font-family:inherit}
+input,select,textarea{font-family:inherit}
+input{font-family:inherit}
+.mock-toggle{position:fixed;right:16px;bottom:16px;z-index:1000;height:48px;padding:0 20px;background:#111;color:#fff;border:0;border-radius:24px;font:700 14px 'Noto Sans JP',sans-serif;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.mock-menu{position:fixed;right:16px;bottom:76px;z-index:1000;width:280px;max-height:70vh;overflow:auto;background:#fff;border:1px solid #111;border-radius:8px;padding:8px 0;display:none;font-family:'Noto Sans JP',sans-serif}
+.mock-menu.open{display:block}
+.mock-menu p{margin:0;padding:8px 16px;font-size:12px;color:#555}
+.mock-menu a{display:block;padding:10px 16px;font-size:14px;color:#111;text-decoration:none}
+.mock-menu a:hover,.mock-menu a.current{background:#eee}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<button class="mock-toggle" type="button" onclick="document.querySelector('.mock-menu').classList.toggle('open')">画面一覧</button>
+<nav class="mock-menu" aria-label="画面一覧"><p>モック（画面イメージ）です。実際のデータ・決済とは連動していません。</p><a href="#Main">1. トップ</a><a href="#Howto">2. 使い方</a><a href="#Buy">3. 商品ページ</a><a href="#Cart">4. カート</a><a href="#Thanks">5. 購入完了</a><a href="#Schools">6. 学校一覧</a><a href="#Result">7. 利用率</a><a href="#Apply">8. 学校の応募フォーム</a><a href="#ApplyDone">9. 応募完了</a><a href="#SchoolLogin">10. 学校ログイン</a><a href="#School">11. 学校専用ページ</a><a href="#AdminDash">12. 企業管理：ダッシュボード</a><a href="#AdminApply">13. 企業管理：応募の審査</a><a href="#AdminSchools">14. 企業管理：学校の管理</a><a href="#AdminRounds">15. 企業管理：寄附の回・発送</a><a href="#AdminOrders">16. 企業管理：寄附（注文）一覧</a><a href="#AdminThanks">17. 企業管理：お礼文</a><a href="#AdminSurvey">18. 企業管理：アンケート集計</a></nav>
+<template id="tpl-Main">
+
+<div style="width: 100%; min-height: 100vh; background: #fff">
+<header style="border-bottom: 1px solid #ddd">
+<div style="max-width: 1120px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+<a href="#Main" style="font-weight: 700; font-size: 20px; text-decoration: none">[サービス名]</a>
+<nav style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center; font-size: 14px"><a href="#Howto" style="text-decoration: none">使い方</a><a href="#Schools" style="text-decoration: none">学校一覧</a><a href="#Result" style="text-decoration: none">利用率</a><a class="btn" href="#Buy" style="background: #111; color: #fff; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-weight: 700">購入する</a></nav>
+</div>
+</header>
+
+<section style="border-bottom: 1px solid #ddd">
+<div style="max-width: 1120px; margin: 0 auto; padding: 72px 24px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
+<div style="flex: 1 1 420px; display: flex; flex-direction: column; gap: 24px">
+<p style="margin: 0; font-size: 14px; color: #555">[商品名] 1個 [価格]円</p>
+<h1 style="margin: 0; font-size: 48px; line-height: 1.3; font-weight: 700">自分に届き、<br>子どもにも届く。</h1>
+<p style="margin: 0; font-size: 17px; line-height: 1.9; color: #333">1つ買うと、同じ商品が小学校の子どもにも1つ届きます。100人分あつまったら、1つの小学校へ100個をまとめて寄附します。</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<a class="btn" href="#Buy" style="background: #111; color: #fff; padding: 16px 28px; border-radius: 6px; text-decoration: none; font-weight: 700">購入する</a>
+<a href="#flow" style="border: 1px solid #111; padding: 15px 28px; border-radius: 6px; text-decoration: none; font-weight: 500">しくみを見る</a>
+</div>
+</div>
+<div style="flex: 1 1 420px; height: 360px; background: #eee; border: 1px dashed #999; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #555; font-size: 14px">画像：商品イメージ</div>
+</div>
+</section>
+
+<section style="background: #f5f5f5; border-bottom: 1px solid #ddd">
+<div style="max-width: 1120px; margin: 0 auto; padding: 48px 24px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px">
+<h2 style="margin: 0; font-size: 22px">いま募集中の寄附</h2>
+<p style="margin: 0; font-size: 14px; color: #555">100人あつまると、1つの小学校へ100個を寄附します</p>
+</div>
+<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<p style="margin: 0; font-size: 28px; font-weight: 700">あと <span style="font-size: 44px">[○]</span> 人で、1校に100個</p>
+<div style="height: 16px; background: #e5e5e5; border-radius: 8px; overflow: hidden" role="img" aria-label="寄附の進み具合（表示例）">
+<div style="width: 64%; height: 100%; background: #111"></div>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 13px; color: #555"><span>[○] / 100人</span><span>表示は例です</span></div>
+</div>
+</div>
+</section>
+
+<section id="flow" style="border-bottom: 1px solid #ddd">
+<div style="max-width: 1120px; margin: 0 auto; padding: 64px 24px; display: flex; flex-direction: column; gap: 32px">
+<h2 style="margin: 0; font-size: 28px">しくみ</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+<div style="border: 1px solid #ddd; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 32px; font-weight: 700">1</span><h3 style="margin: 0; font-size: 18px">購入する</h3><p style="margin: 0; font-size: 14px; line-height: 1.8; color: #333">1個[価格]円で購入・決済。</p></div>
+<div style="border: 1px solid #ddd; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 32px; font-weight: 700">2</span><h3 style="margin: 0; font-size: 18px">自分に届く</h3><p style="margin: 0; font-size: 14px; line-height: 1.8; color: #333">同じ商品が、あなたにも届きます。</p></div>
+<div style="border: 1px solid #ddd; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 32px; font-weight: 700">3</span><h3 style="margin: 0; font-size: 18px">100人で1校へ</h3><p style="margin: 0; font-size: 14px; line-height: 1.8; color: #333">100人あつまると、寄附先の小学校が決まり、お知らせが届きます。</p></div>
+<div style="border: 1px solid #ddd; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 32px; font-weight: 700">4</span><h3 style="margin: 0; font-size: 18px">お礼と結果が届く</h3><p style="margin: 0; font-size: 14px; line-height: 1.8; color: #333">学校からのお礼と、3か月後の利用状況をお知らせします。</p></div>
+</div>
+</div>
+</section>
+
+<section style="border-bottom: 1px solid #ddd">
+<div style="max-width: 1120px; margin: 0 auto; padding: 56px 24px; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px"><h2 style="margin: 0; font-size: 28px">これまでの寄附</h2><a href="#Result" style="font-size: 14px">利用率を見る →</a></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+<div style="border: 1px solid #ddd; border-radius: 8px; padding: 24px"><p style="margin: 0; font-size: 14px; color: #555">寄附した学校</p><p style="margin: 8px 0 0; font-size: 36px; font-weight: 700">[○]校</p></div>
+<div style="border: 1px solid #ddd; border-radius: 8px; padding: 24px"><p style="margin: 0; font-size: 14px; color: #555">届けた数</p><p style="margin: 8px 0 0; font-size: 36px; font-weight: 700">[○]個</p></div>
+<div style="border: 1px solid #ddd; border-radius: 8px; padding: 24px"><p style="margin: 0; font-size: 14px; color: #555">平均利用率</p><p style="margin: 8px 0 0; font-size: 36px; font-weight: 700">[○]%</p></div>
+</div>
+</div>
+</section>
+
+<section style="background: #111">
+<div style="max-width: 1120px; margin: 0 auto; padding: 56px 24px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 8px; flex: 1 1 420px"><h2 style="margin: 0; font-size: 24px; color: #fff">小学校の先生へ</h2><p style="margin: 0; font-size: 15px; line-height: 1.8; color: #ddd">応募フォームから申し込めます。先生の手間は、受け取りボタンとアンケートだけです。</p></div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><a href="#Apply" style="background: #fff; color: #111; padding: 16px 28px; border-radius: 6px; text-decoration: none; font-weight: 700">応募する</a><a href="#SchoolLogin" style="border: 1px solid #fff; color: #fff; padding: 15px 24px; border-radius: 6px; text-decoration: none">学校ログイン</a></div>
+</div>
+</section>
+
+<footer style="border-top: 1px solid #ddd">
+<div style="max-width: 1120px; margin: 0 auto; padding: 32px 24px; display: flex; flex-direction: column; gap: 12px; font-size: 13px; color: #555">
+<nav style="display: flex; flex-wrap: wrap; gap: 20px"><a href="#" style="color: #555">特定商取引法に基づく表記</a><a href="#" style="color: #555">プライバシーポリシー</a><a href="#" style="color: #555">利用規約</a><a href="#AdminDash" style="color: #555">企業管理（デモ）</a></nav>
+<p style="margin: 0">※ 本商品の購入は、寄附金控除の対象ではありません。</p>
+</div>
+</footer>
+</div>
+</template><template id="tpl-Howto">
+
+<div style="width: 100%; min-height: 100vh; background: #fff">
+<header style="border-bottom: 1px solid #ddd"><div style="max-width: 1120px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between"><a href="#Main" style="font-weight: 700; font-size: 20px; text-decoration: none">[サービス名]</a><nav style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center; font-size: 14px"><a href="#Howto" style="text-decoration: underline; font-weight: 700">使い方</a><a href="#Schools" style="text-decoration: none">学校一覧</a><a href="#Result" style="text-decoration: none">利用率</a><a class="btn" href="#Buy" style="background: #111; color: #fff; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-weight: 700">購入する</a></nav></div></header>
+
+<main style="max-width: 1120px; margin: 0 auto; padding: 56px 24px 72px; display: flex; flex-direction: column; gap: 48px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<p style="margin: 0; font-size: 14px; color: #555">使い方</p>
+<h1 style="margin: 0; font-size: 36px">どこで使うか、写真で見る。</h1>
+<p style="margin: 0; font-size: 16px; line-height: 1.9; color: #333">[商品の使い方の説明が入ります]</p>
+</div>
+
+<section style="display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-size: 22px">使用シーン</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px">
+<div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden"><div style="height: 180px; background: #eee; border-bottom: 1px dashed #999; display: flex; align-items: center; justify-content: center; color: #555; font-size: 13px">画像：使用シーン1</div><div style="padding: 16px"><h3 style="margin: 0; font-size: 17px">[シーン1]</h3><p style="margin: 6px 0 0; font-size: 14px; color: #333">[ひとこと説明]</p></div></div>
+<div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden"><div style="height: 180px; background: #eee; border-bottom: 1px dashed #999; display: flex; align-items: center; justify-content: center; color: #555; font-size: 13px">画像：使用シーン2</div><div style="padding: 16px"><h3 style="margin: 0; font-size: 17px">[シーン2]</h3><p style="margin: 6px 0 0; font-size: 14px; color: #333">[ひとこと説明]</p></div></div>
+<div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden"><div style="height: 180px; background: #eee; border-bottom: 1px dashed #999; display: flex; align-items: center; justify-content: center; color: #555; font-size: 13px">画像：使用シーン3</div><div style="padding: 16px"><h3 style="margin: 0; font-size: 17px">[シーン3]</h3><p style="margin: 6px 0 0; font-size: 14px; color: #333">[ひとこと説明]</p></div></div>
+<div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden"><div style="height: 180px; background: #eee; border-bottom: 1px dashed #999; display: flex; align-items: center; justify-content: center; color: #555; font-size: 13px">画像：使用シーン4</div><div style="padding: 16px"><h3 style="margin: 0; font-size: 17px">[シーン4]</h3><p style="margin: 6px 0 0; font-size: 14px; color: #333">[ひとこと説明]</p></div></div>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-size: 22px">比べて見る</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 220px; background: #eee; border: 1px dashed #999; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #555; font-size: 13px">画像：比較A</div><p style="margin: 0; font-weight: 700">[比較A]</p></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 220px; background: #eee; border: 1px dashed #999; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #555; font-size: 13px">画像：比較B</div><p style="margin: 0; font-weight: 700">[比較B]</p></div>
+</div>
+</section>
+
+<div style="display: flex; justify-content: center"><a class="btn" href="#Buy" style="background: #111; color: #fff; padding: 18px 40px; border-radius: 6px; text-decoration: none; font-weight: 700">購入する</a></div>
+</main>
+</div>
+</template><template id="tpl-Buy">
+
+<div style="width: 100%; min-height: 100vh; background: #fff">
+<header style="border-bottom: 1px solid #ddd">
+<div style="max-width: 1120px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+<a href="#Main" style="font-weight: 700; font-size: 20px; text-decoration: none">[サービス名]</a>
+<nav style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center; font-size: 14px"><a href="#Howto" style="text-decoration: none">使い方</a><a href="#Schools" style="text-decoration: none">学校一覧</a><a href="#Result" style="text-decoration: none">利用率</a><a class="btn" href="#Buy" style="background: #111; color: #fff; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-weight: 700">購入する</a></nav>
+</div>
+</header>
+
+<main style="max-width: 1120px; margin: 0 auto; padding: 48px 24px 72px; display: flex; flex-direction: column; gap: 40px">
+<div style="display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start">
+<div style="flex: 1 1 420px; display: flex; flex-direction: column; gap: 12px">
+<div style="height: 380px; background: #eee; border: 1px dashed #999; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #555; font-size: 14px">画像：商品メイン</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<div style="height: 120px; background: #eee; border: 1px dashed #999; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #555; font-size: 13px">画像：使用イメージ</div>
+<div style="height: 120px; background: #eee; border: 1px dashed #999; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #555; font-size: 13px">画像：使用イメージ</div>
+</div>
+</div>
+
+<div style="flex: 1 1 420px; display: flex; flex-direction: column; gap: 20px">
+<h1 style="margin: 0; font-size: 30px">[商品名]</h1>
+<p style="margin: 0; font-size: 36px; font-weight: 700">{{price}}<span style="font-size: 14px; font-weight: 400; color: #555">（税込・送料別）</span></p>
+<button aria-pressed="{{give}}" onClick="{{toggle}}" style="{{boxStyle}}">
+<span style="{{checkStyle}}"><sc-if value="{{give}}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L19 7"></path></svg></sc-if></span>
+<span style="display: flex; flex-direction: column; gap: 4px; flex: 1">
+<span style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px"><span style="font-size: 18px; font-weight: 700">小学校の子どもにも1個届ける</span><span style="font-size: 13px; font-weight: 700; border: 1px solid #111; border-radius: 99px; padding: 2px 10px; white-space: nowrap">追加料金なし</span></span>
+<span style="font-size: 14px; color: #333">押すと、同じ商品が小学校の子どもにも届きます。お支払いは変わりません。</span>
+</span>
+</button>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-size: 14px; font-weight: 500">数量</p>
+<div style="display: flex; align-items: center; gap: 8px">
+<button aria-label="数量を減らす" onClick="{{dec}}" style="width: 44px; height: 44px; border: 1px solid #999; background: #fff; border-radius: 6px; font-size: 20px; cursor: pointer">−</button>
+<span style="min-width: 48px; text-align: center; font-size: 20px; font-weight: 700">{{qty}}</span>
+<button aria-label="数量を増やす" onClick="{{inc}}" style="width: 44px; height: 44px; border: 1px solid #999; background: #fff; border-radius: 6px; font-size: 20px; cursor: pointer">＋</button>
+</div>
+<p style="margin: 0; font-size: 14px; color: #333">{{summary}}</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="area" style="font-size: 14px; font-weight: 500; color: #555">応援したい地域を選ぶ（あとから追加予定）</label>
+<select id="area" disabled style="height: 44px; border: 1px dashed #999; border-radius: 6px; padding: 0 12px; font-size: 14px; color: #555; background: #f5f5f5"><option>おまかせ</option></select>
+</div>
+
+<a class="btn" href="#Cart" style="background: #111; color: #fff; padding: 18px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 17px; text-align: center">カートに入れる</a>
+<p style="margin: 0; font-size: 13px; color: #555">いま募集中の寄附：あと [○] 人で、1校に100個</p>
+</div>
+</div>
+
+<section style="border-top: 1px solid #ddd; padding-top: 32px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 20px">商品について</h2>
+<p style="margin: 0; font-size: 15px; line-height: 1.9; color: #333">[商品のストーリー・特徴の説明が入ります]</p>
+<p style="margin: 0; font-size: 13px; color: #555">※ 本商品の購入は、寄附金控除の対象ではありません。</p>
+</section>
+</main>
+</div>
+</template><template id="tpl-Cart">
+
+<div style="width: 100%; min-height: 100vh; background: #fff">
+<header style="border-bottom: 1px solid #ddd"><div style="max-width: 1120px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between"><a href="#Main" style="font-weight: 700; font-size: 20px; text-decoration: none">[サービス名]</a><nav style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center; font-size: 14px"><a href="#Howto" style="text-decoration: none">使い方</a><a href="#Schools" style="text-decoration: none">学校一覧</a><a href="#Result" style="text-decoration: none">利用率</a></nav></div></header>
+
+<main style="max-width: 960px; margin: 0 auto; padding: 48px 24px 72px; display: flex; flex-direction: column; gap: 28px">
+<h1 style="margin: 0; font-size: 30px">カート</h1>
+<div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start">
+<section style="flex: 2 1 480px; border: 1px solid #ddd; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; gap: 20px; align-items: flex-start">
+<div style="width: 120px; height: 120px; flex: 0 0 120px; background: #eee; border: 1px dashed #999; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #555; font-size: 12px">商品画像</div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-size: 18px; font-weight: 700">[商品名]</p>
+<p style="margin: 0; font-size: 15px">[価格]円 × 1</p>
+<span style="align-self: flex-start; font-size: 13px; font-weight: 700; background: #111; color: #fff; border-radius: 99px; padding: 3px 12px">寄附あり：子どもにも1個届きます</span>
+<a href="#Buy" style="font-size: 13px">内容を変更する</a>
+</div>
+</div>
+<div style="background: #f5f5f5; border-radius: 6px; padding: 16px; font-size: 14px; line-height: 1.8; color: #333">この注文で、いま募集中の寄附が <strong>あと [○] 人</strong> になります。100人あつまると、1つの小学校へ100個を寄附します。</div>
+</section>
+
+<aside style="flex: 1 1 260px; border: 2px solid #111; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; font-size: 15px"><span>小計</span><span>[価格]円</span></div>
+<div style="display: flex; justify-content: space-between; font-size: 15px"><span>寄附</span><span>追加料金なし</span></div>
+<div style="display: flex; justify-content: space-between; font-size: 15px; color: #555"><span>送料</span><span>次の画面で計算</span></div>
+<div style="border-top: 1px solid #ddd; padding-top: 14px; display: flex; justify-content: space-between; font-size: 20px; font-weight: 700"><span>合計</span><span>[価格]円</span></div>
+<a class="btn" href="#Thanks" style="background: #111; color: #fff; padding: 16px; border-radius: 6px; text-decoration: none; font-weight: 700; text-align: center">決済へ進む</a>
+<p style="margin: 0; font-size: 12px; color: #555; line-height: 1.7">決済はShopifyの画面で行います（モックでは省略し、購入完了へ進みます）。</p>
+</aside>
+</div>
+</main>
+</div>
+</template><template id="tpl-Thanks">
+
+<div style="width: 100%; min-height: 100vh; background: #fff">
+<header style="border-bottom: 1px solid #ddd">
+<div style="max-width: 1120px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+<a href="#Main" style="font-weight: 700; font-size: 20px; text-decoration: none">[サービス名]</a>
+<nav style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center; font-size: 14px"><a href="#Howto" style="text-decoration: none">使い方</a><a href="#Schools" style="text-decoration: none">学校一覧</a><a href="#Result" style="text-decoration: none">利用率</a></nav>
+</div>
+</header>
+
+<main style="max-width: 760px; margin: 0 auto; padding: 64px 24px 80px; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 12px; text-align: center; align-items: center">
+<div style="width: 64px; height: 64px; border: 2px solid #111; border-radius: 50%; display: flex; align-items: center; justify-content: center">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L19 7"></path></svg>
+</div>
+<h1 style="margin: 0; font-size: 30px">寄附が完了しました</h1>
+<p style="margin: 0; font-size: 16px; line-height: 1.9; color: #333">ご購入ありがとうございます。<br>あなたへの1個と、小学校の子どもへの1個が決まりました。</p>
+</div>
+
+<div style="background: #f5f5f5; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<p style="margin: 0; font-size: 22px; font-weight: 700">あと [○] 人で、1校に100個</p>
+<div style="height: 14px; background: #ddd; border-radius: 7px; overflow: hidden" role="img" aria-label="寄附の進み具合（表示例）"><div style="width: 65%; height: 100%; background: #111"></div></div>
+<p style="margin: 0; font-size: 13px; color: #555">あなたの1個で [○] / 100人になりました（表示は例です）</p>
+</div>
+
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 20px">これから届くお知らせ</h2>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; border: 1px solid #ddd; border-radius: 8px">
+<li style="padding: 16px 20px; border-bottom: 1px solid #ddd; display: flex; gap: 16px"><span style="font-weight: 700; min-width: 24px">1</span><div><p style="margin: 0; font-weight: 700">注文確認・発送のお知らせ</p><p style="margin: 4px 0 0; font-size: 14px; color: #555">あなたへの商品の発送状況</p></div></li>
+<li style="padding: 16px 20px; border-bottom: 1px solid #ddd; display: flex; gap: 16px"><span style="font-weight: 700; min-width: 24px">2</span><div><p style="margin: 0; font-weight: 700">寄附先のお知らせ</p><p style="margin: 4px 0 0; font-size: 14px; color: #555">100人集まり、寄附先の学校が決まったとき</p></div></li>
+<li style="padding: 16px 20px; border-bottom: 1px solid #ddd; display: flex; gap: 16px"><span style="font-weight: 700; min-width: 24px">3</span><div><p style="margin: 0; font-weight: 700">学校からのお礼</p><p style="margin: 4px 0 0; font-size: 14px; color: #555">学校が受け取ったとき</p></div></li>
+<li style="padding: 16px 20px; display: flex; gap: 16px"><span style="font-weight: 700; min-width: 24px">4</span><div><p style="margin: 0; font-weight: 700">利用状況の結果</p><p style="margin: 4px 0 0; font-size: 14px; color: #555">受け取りから3か月後</p></div></li>
+</ol>
+</section>
+
+<div style="display: flex; justify-content: center">
+<a class="btn" href="#Main" style="background: #111; color: #fff; padding: 16px 28px; border-radius: 6px; text-decoration: none; font-weight: 700">トップへ戻る</a>
+</div>
+</main>
+</div>
+</template><template id="tpl-Schools">
+
+<div style="width: 100%; min-height: 100vh; background: #fff">
+<header style="border-bottom: 1px solid #ddd"><div style="max-width: 1120px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between"><a href="#Main" style="font-weight: 700; font-size: 20px; text-decoration: none">[サービス名]</a><nav style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center; font-size: 14px"><a href="#Howto" style="text-decoration: none">使い方</a><a href="#Schools" style="text-decoration: underline; font-weight: 700">学校一覧</a><a href="#Result" style="text-decoration: none">利用率</a><a class="btn" href="#Buy" style="background: #111; color: #fff; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-weight: 700">購入する</a></nav></div></header>
+
+<main style="max-width: 1120px; margin: 0 auto; padding: 48px 24px 72px; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h1 style="margin: 0; font-size: 32px">学校一覧</h1>
+<p style="margin: 0; font-size: 15px; color: #333">寄附がどの学校に届いているかを公開しています。学校が「受け取りました」を押すと、表示が切り替わります。</p>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+<div style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px">
+<span style="background: #111; color: #fff; padding: 2px 10px; border-radius: 99px">受け取り済み</span>
+<span style="border: 1px solid #111; padding: 1px 10px; border-radius: 99px">発送済み</span>
+<span style="background: #e5e5e5; padding: 2px 10px; border-radius: 99px">寄附先決定</span>
+<span style="border: 1px dashed #555; color: #555; padding: 1px 10px; border-radius: 99px">承認済み・順番待ち</span>
+</div>
+<div style="display: flex; gap: 8px; align-items: center"><label for="pref" style="font-size: 14px">地域</label><select id="pref" style="height: 44px; border: 1px solid #999; border-radius: 6px; padding: 0 12px; font-size: 14px; background: #fff"><option>すべて</option><option>[都道府県]</option></select></div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px">
+<sc-for list="{{schools}}" as="s" hint-placeholder-count="6">
+<div style="{{s.card}}">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px">
+<div><p style="margin: 0; font-size: 18px; font-weight: 700">{{s.name}}</p><p style="margin: 4px 0 0; font-size: 13px; color: #555">{{s.area}}</p></div>
+<span style="{{s.badge}}">{{s.status}}</span>
+</div>
+<div style="display: flex; gap: 24px; font-size: 14px; border-top: 1px solid #ddd; padding-top: 12px">
+<div><p style="margin: 0; color: #555; font-size: 12px">寄附した数</p><p style="margin: 2px 0 0; font-weight: 700">{{s.count}}</p></div>
+<div><p style="margin: 0; color: #555; font-size: 12px">受け取り日</p><p style="margin: 2px 0 0; font-weight: 700">{{s.date}}</p></div>
+<div><p style="margin: 0; color: #555; font-size: 12px">利用率（3か月後）</p><p style="margin: 2px 0 0; font-weight: 700">{{s.rate}}</p></div>
+</div>
+</div>
+</sc-for>
+</div>
+<p style="margin: 0; font-size: 13px; color: #555">※ サイトには学校名と数字のみを掲載します。子どもの写真は学校の許可があるものだけを掲載します。</p>
+</main>
+</div>
+</template><template id="tpl-Result">
+
+<div style="width: 100%; min-height: 100vh; background: #fff">
+<header style="border-bottom: 1px solid #ddd"><div style="max-width: 1120px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between"><a href="#Main" style="font-weight: 700; font-size: 20px; text-decoration: none">[サービス名]</a><nav style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center; font-size: 14px"><a href="#Howto" style="text-decoration: none">使い方</a><a href="#Schools" style="text-decoration: none">学校一覧</a><a href="#Result" style="text-decoration: underline; font-weight: 700">利用率</a><a class="btn" href="#Buy" style="background: #111; color: #fff; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-weight: 700">購入する</a></nav></div></header>
+
+<main style="max-width: 1120px; margin: 0 auto; padding: 48px 24px 72px; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h1 style="margin: 0; font-size: 32px">寄附の「その後」を、数字で見る。</h1>
+<p style="margin: 0; font-size: 15px; color: #333">学校が受け取ってから3か月後のアンケートで、子どもたちの利用率を集計しています。</p>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px">
+<div style="flex: 1 1 280px; border: 2px solid #111; border-radius: 8px; padding: 32px; display: flex; flex-direction: column; gap: 8px; justify-content: center; align-items: center; text-align: center">
+<p style="margin: 0; font-size: 15px; color: #333">全体の平均利用率</p>
+<p style="margin: 0; font-size: 72px; font-weight: 700; line-height: 1.1">[○]%</p>
+<p style="margin: 0; font-size: 13px; color: #555">回答校 [○]校の平均</p>
+</div>
+<div style="flex: 2 1 480px; border: 1px solid #ddd; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-size: 18px">利用率の推移</h2><span style="font-size: 12px; color: #555">グラフは表示例です</span></div>
+<svg viewBox="0 0 560 220" width="100%" role="img" aria-label="利用率の推移グラフ（表示例）">
+<line x1="40" y1="20" x2="40" y2="180" stroke="#999" stroke-width="1"></line>
+<line x1="40" y1="180" x2="540" y2="180" stroke="#999" stroke-width="1"></line>
+<line x1="40" y1="100" x2="540" y2="100" stroke="#e5e5e5" stroke-width="1"></line>
+<line x1="40" y1="20" x2="540" y2="20" stroke="#e5e5e5" stroke-width="1"></line>
+<polyline points="70,160 180,140 290,115 400,100 510,75" fill="none" stroke="#111" stroke-width="3"></polyline>
+<circle cx="70" cy="160" r="5" fill="#111"></circle><circle cx="180" cy="140" r="5" fill="#111"></circle><circle cx="290" cy="115" r="5" fill="#111"></circle><circle cx="400" cy="100" r="5" fill="#111"></circle><circle cx="510" cy="75" r="7" fill="#fff" stroke="#111" stroke-width="3"></circle>
+<text x="70" y="204" font-size="12" fill="#555" text-anchor="middle">[月]</text><text x="290" y="204" font-size="12" fill="#555" text-anchor="middle">[月]</text><text x="510" y="204" font-size="12" fill="#555" text-anchor="middle">[月]</text>
+<text x="32" y="24" font-size="12" fill="#555" text-anchor="end">%</text>
+</svg>
+</div>
+</div>
+
+<section style="display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 20px">学校ごとの比較（寄附前と3か月後）</h2>
+<div style="overflow-x: auto; border: 1px solid #ddd; border-radius: 8px">
+<table style="width: 100%; border-collapse: collapse; font-size: 15px; min-width: 520px">
+<thead><tr style="background: #f5f5f5; text-align: left"><th style="padding: 14px 20px">学校</th><th style="padding: 14px 20px">寄附前</th><th style="padding: 14px 20px">3か月後</th><th style="padding: 14px 20px">変化</th></tr></thead>
+<tbody>
+<tr style="border-top: 1px solid #ddd"><td style="padding: 14px 20px">○○小学校（[市町村]）</td><td style="padding: 14px 20px; color: #555">[○]%</td><td style="padding: 14px 20px; font-weight: 700">[○]%</td><td style="padding: 14px 20px">+[○]pt</td></tr>
+<tr style="border-top: 1px solid #ddd"><td style="padding: 14px 20px">○○小学校（[市町村]）</td><td style="padding: 14px 20px; color: #555">[○]%</td><td style="padding: 14px 20px; font-weight: 700">[○]%</td><td style="padding: 14px 20px">+[○]pt</td></tr>
+<tr style="border-top: 1px solid #ddd"><td style="padding: 14px 20px">○○小学校（[市町村]）</td><td style="padding: 14px 20px; color: #555">[○]%</td><td style="padding: 14px 20px; color: #555">回答待ち</td><td style="padding: 14px 20px; color: #555">—</td></tr>
+</tbody>
+</table>
+</div>
+<p style="margin: 0; font-size: 13px; color: #555">※ 寄附前の数値は、学校の応募時に回答いただいたものです。数え方は全校でそろえています。</p>
+</section>
+</main>
+</div>
+</template><template id="tpl-Apply">
+
+<div style="width: 100%; min-height: 100vh; background: #fff">
+<header style="border-bottom: 1px solid #ddd"><div style="max-width: 1120px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between"><a href="#Main" style="font-weight: 700; font-size: 20px; text-decoration: none">[サービス名]</a><nav style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center; font-size: 14px"><a href="#Howto" style="text-decoration: none">使い方</a><a href="#Schools" style="text-decoration: none">学校一覧</a><a href="#Result" style="text-decoration: none">利用率</a></nav></div></header>
+
+<main style="max-width: 760px; margin: 0 auto; padding: 48px 24px 72px; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<p style="margin: 0; font-size: 14px; color: #555">小学校の先生へ</p>
+<h1 style="margin: 0; font-size: 32px">応募フォーム</h1>
+<p style="margin: 0; font-size: 15px; line-height: 1.9; color: #333">承認後、100人分の寄附があつまった順に、100個をお届けします。先生の手間は、受け取りボタンとアンケートだけです。</p>
+</div>
+
+<ol style="margin: 0; padding: 20px 24px; list-style: none; display: flex; flex-wrap: wrap; gap: 8px 20px; background: #f5f5f5; border-radius: 8px; font-size: 14px">
+<li>1 応募する</li><li>→ 2 承認される</li><li>→ 3 100個届く</li><li>→ 4 ボタンを押す</li><li>→ 5 お礼を送る</li><li>→ 6 3か月後にアンケート</li>
+</ol>
+
+<form style="display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="f1" style="font-size: 14px; font-weight: 500">学校名（必須）</label><input id="f1" type="text" placeholder="例：○○市立○○小学校" style="height: 48px; border: 1px solid #999; border-radius: 6px; padding: 0 14px; font-size: 15px"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="f2" style="font-size: 14px; font-weight: 500">所在地（必須）</label><input id="f2" type="text" placeholder="都道府県・市町村・番地" style="height: 48px; border: 1px solid #999; border-radius: 6px; padding: 0 14px; font-size: 15px"></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="f3" style="font-size: 14px; font-weight: 500">児童数</label><input id="f3" type="number" placeholder="例：120" style="height: 48px; border: 1px solid #999; border-radius: 6px; padding: 0 14px; font-size: 15px"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="f4" style="font-size: 14px; font-weight: 500">希望する学年</label><select id="f4" style="height: 48px; border: 1px solid #999; border-radius: 6px; padding: 0 14px; font-size: 15px; background: #fff"><option>1年生</option><option>1〜2年生</option><option>全学年</option></select></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="f5" style="font-size: 14px; font-weight: 500">担当の先生のお名前（必須）</label><input id="f5" type="text" style="height: 48px; border: 1px solid #999; border-radius: 6px; padding: 0 14px; font-size: 15px"></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="f6" style="font-size: 14px; font-weight: 500">電話番号</label><input id="f6" type="tel" style="height: 48px; border: 1px solid #999; border-radius: 6px; padding: 0 14px; font-size: 15px"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="f7" style="font-size: 14px; font-weight: 500">メールアドレス（必須）</label><input id="f7" type="email" style="height: 48px; border: 1px solid #999; border-radius: 6px; padding: 0 14px; font-size: 15px"></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="f8" style="font-size: 14px; font-weight: 500">いまの利用率（わかる範囲で）</label><div style="display: flex; align-items: center; gap: 8px"><input id="f8" type="number" placeholder="例：20" style="width: 120px; height: 48px; border: 1px solid #999; border-radius: 6px; padding: 0 14px; font-size: 15px"><span>%</span></div><p style="margin: 0; font-size: 13px; color: #555">寄附前と3か月後を比べて、効果をお知らせするために使います。</p></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="f9" style="font-size: 14px; font-weight: 500">応募の理由（ひとこと）</label><textarea id="f9" rows="3" style="border: 1px solid #999; border-radius: 6px; padding: 12px 14px; font-size: 15px; resize: vertical"></textarea></div>
+<fieldset style="border: 2px solid #111; border-radius: 8px; padding: 20px 24px; margin: 0; display: flex; flex-direction: column; gap: 16px">
+<legend style="padding: 0 8px; font-weight: 700">2つの約束</legend>
+<label style="display: flex; gap: 12px; align-items: flex-start; cursor: pointer"><input type="checkbox" style="width: 22px; height: 22px; margin-top: 2px"><span><span style="font-weight: 700">約束1　届いたらボタンを押す</span><br><span style="font-size: 14px; color: #333">学校専用ページの「受け取りました」を押し、お礼の文を選んで送ります。</span></span></label>
+<label style="display: flex; gap: 12px; align-items: flex-start; cursor: pointer"><input type="checkbox" style="width: 22px; height: 22px; margin-top: 2px"><span><span style="font-weight: 700">約束2　3か月後のアンケートに答える</span><br><span style="font-size: 14px; color: #333">利用率のアンケートには必ず回答します。結果はサイトに反映されます。</span></span></label>
+</fieldset>
+<a class="btn" href="#ApplyDone" style="height: 56px; background: #111; color: #fff; border-radius: 6px; font-size: 17px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center">応募する</a>
+</form>
+</main>
+</div>
+</template><template id="tpl-ApplyDone">
+
+<div style="width: 100%; min-height: 100vh; background: #fff">
+<header style="border-bottom: 1px solid #ddd"><div style="max-width: 1120px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center"><a href="#Main" style="font-weight: 700; font-size: 20px; text-decoration: none">[サービス名]</a></div></header>
+<main style="max-width: 680px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 28px; align-items: center; text-align: center">
+<div style="width: 64px; height: 64px; border: 2px solid #111; border-radius: 50%; display: flex; align-items: center; justify-content: center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L19 7"></path></svg></div>
+<h1 style="margin: 0; font-size: 30px">応募を受け付けました</h1>
+<p style="margin: 0; font-size: 16px; line-height: 1.9; color: #333">ご応募ありがとうございます。<br>受付完了のメールをお送りしました。内容を確認のうえ、運営よりご連絡します。</p>
+<ol style="margin: 0; padding: 0; list-style: none; width: 100%; text-align: left; border: 1px solid #ddd; border-radius: 8px">
+<li style="padding: 16px 20px; border-bottom: 1px solid #ddd"><strong>承認のご連絡</strong><br><span style="font-size: 14px; color: #555">承認されると、学校専用ページのログイン案内が届きます</span></li>
+<li style="padding: 16px 20px; border-bottom: 1px solid #ddd"><strong>寄附先決定のご連絡</strong><br><span style="font-size: 14px; color: #555">100人分の寄附があつまり、寄附先に決まったとき</span></li>
+<li style="padding: 16px 20px"><strong>お届け</strong><br><span style="font-size: 14px; color: #555">届いたら学校専用ページで「受け取りました」を押してください</span></li>
+</ol>
+<a class="btn" href="#Main" style="background: #111; color: #fff; padding: 16px 28px; border-radius: 6px; text-decoration: none; font-weight: 700">トップへ戻る</a>
+</main>
+</div>
+</template><template id="tpl-SchoolLogin">
+
+<div style="width: 100%; min-height: 100vh; background: #f5f5f5">
+<header style="background: #fff; border-bottom: 1px solid #ddd"><div style="max-width: 960px; margin: 0 auto; padding: 16px 24px"><p style="margin: 0; font-weight: 700; font-size: 20px">[サービス名]<span style="font-size: 15px; margin-left: 12px">学校専用ページ</span></p></div></header>
+<main style="max-width: 480px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 20px">
+<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 32px; display: flex; flex-direction: column; gap: 20px">
+<h1 style="margin: 0; font-size: 24px">ログイン</h1>
+<p style="margin: 0; font-size: 14px; line-height: 1.8; color: #333">応募時に登録したメールアドレスを入力してください。ログイン用のリンクをお送りします。パスワードは不要です。</p>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="em" style="font-size: 14px; font-weight: 500">メールアドレス</label><input id="em" type="email" placeholder="example@school.ed.jp" style="height: 48px; border: 1px solid #999; border-radius: 6px; padding: 0 14px; font-size: 15px"></div>
+<a class="btn" href="#School" style="height: 52px; background: #111; color: #fff; border-radius: 6px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center">ログイン用のリンクを送る</a>
+<p style="margin: 0; font-size: 12px; color: #555">モックでは、ボタンを押すとメールのリンクを開いた後の画面に進みます。</p>
+</div>
+<p style="margin: 0; font-size: 13px; color: #555; text-align: center">まだ応募していない学校は <a href="#Apply">応募フォーム</a> から</p>
+</main>
+</div>
+</template><template id="tpl-School">
+
+<div style="width: 100%; min-height: 100vh; background: #fff">
+<header style="border-bottom: 1px solid #ddd"><div style="max-width: 960px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between"><p style="margin: 0; font-weight: 700; font-size: 20px">[サービス名]<span style="font-size: 15px; margin-left: 12px">学校専用ページ</span></p><a href="#SchoolLogin" style="font-size: 14px">ログアウト</a></div></header>
+
+<main style="max-width: 960px; margin: 0 auto; padding: 40px 24px 72px; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font-size: 28px">○○小学校さま</h1>
+<p style="margin: 0; font-size: 15px; color: #333">先生にお願いすることは、上から順に3つだけです。</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px" role="tablist">
+<button role="tab" onClick="{{go1}}" style="{{tab1}}">① 受け取り</button>
+<button role="tab" onClick="{{go2}}" style="{{tab2}}">② お礼</button>
+<button role="tab" onClick="{{go3}}" style="{{tab3}}">③ アンケート</button>
+</div>
+
+<sc-if value="{{isStep1}}" hint-placeholder-val="{{ true }}">
+<section style="border: 1px solid #ddd; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+<div><p style="margin: 0; font-size: 18px; font-weight: 700">100個が届いたら押してください</p><p style="margin: 6px 0 0; font-size: 14px; color: #555">押すと、学校一覧の表示が「受け取り済み」に変わります。</p></div>
+<sc-if value="{{notReceived}}" hint-placeholder-val="{{ true }}"><button onClick="{{receive}}" style="height: 56px; padding: 0 32px; background: #111; color: #fff; border: 0; border-radius: 6px; font-size: 17px; font-weight: 700; cursor: pointer; font-family: inherit">受け取りました</button></sc-if>
+<sc-if value="{{received}}" hint-placeholder-val="{{ false }}"><p style="margin: 0; padding: 14px 24px; border: 2px solid #111; border-radius: 6px; font-weight: 700">受け取り済み（[○月○日]）</p></sc-if>
+</div>
+<div style="font-size: 14px; color: #555; border-top: 1px solid #ddd; padding-top: 12px">発送日：[○月○日]　／　内容：[商品名] 100個</div>
+</section>
+</sc-if>
+
+<sc-if value="{{isStep2}}" hint-placeholder-val="{{ false }}">
+<section style="border: 1px solid #ddd; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<div><p style="margin: 0; font-size: 18px; font-weight: 700">お礼の文を選ぶ（寄附した方全員に届きます）</p><p style="margin: 6px 0 0; font-size: 14px; color: #555">決まった文から選ぶだけです。寄附した方の連絡先は学校には表示されません。</p></div>
+<div style="display: flex; flex-direction: column; gap: 8px" role="radiogroup">
+<sc-for list="{{msgs}}" as="m" hint-placeholder-count="3"><button role="radio" onClick="{{m.pick}}" style="{{m.style}}"><span style="{{m.dot}}"></span><span>{{m.text}}</span></button></sc-for>
+</div>
+<div style="display: flex; justify-content: flex-end"><button onClick="{{send}}" style="height: 52px; padding: 0 28px; background: #111; color: #fff; border: 0; border-radius: 6px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit">{{sendLabel}}</button></div>
+</section>
+</sc-if>
+
+<sc-if value="{{isStep3}}" hint-placeholder-val="{{ false }}">
+<section style="border: 1px solid #ddd; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+<div><p style="margin: 0; font-size: 18px; font-weight: 700">利用率アンケート（回答期限 [○月○日]）</p><p style="margin: 6px 0 0; font-size: 14px; color: #555">受け取りから3か月後に回答できるようになります。期限が近づくとお知らせが届きます。</p></div>
+<button disabled style="height: 52px; padding: 0 28px; background: #ccc; color: #333; border: 0; border-radius: 6px; font-size: 15px; font-weight: 700; font-family: inherit">3か月後に回答できます</button>
+</div>
+<div style="background: #f5f5f5; border-radius: 6px; padding: 16px; font-size: 14px; line-height: 1.8; color: #333">回答する内容（予定）：利用している児童の割合、数えた日・数え方、ひとこと感想<br>※ 設問は随時相談で確定</div>
+</section>
+</sc-if>
+
+<section style="display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 18px">これまでの履歴</h2>
+<div style="overflow-x: auto; border: 1px solid #ddd; border-radius: 8px">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px; min-width: 520px">
+<thead><tr style="background: #f5f5f5; text-align: left"><th style="padding: 12px 16px">回</th><th style="padding: 12px 16px">受け取り</th><th style="padding: 12px 16px">お礼</th><th style="padding: 12px 16px">アンケート</th></tr></thead>
+<tbody><tr style="border-top: 1px solid #ddd"><td style="padding: 12px 16px">第[○]回（100個）</td><td style="padding: 12px 16px">{{histReceive}}</td><td style="padding: 12px 16px">{{histThanks}}</td><td style="padding: 12px 16px; color: #555">回答前</td></tr></tbody>
+</table>
+</div>
+</section>
+</main>
+</div>
+</template><template id="tpl-AdminDash">
+
+<div style="width: 100%; min-height: 100vh; background: #f5f5f5">
+<header style="background: #111"><div style="padding: 14px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between"><p style="margin: 0; font-weight: 700; font-size: 17px; color: #fff">[サービス名]　企業管理</p><p style="margin: 0; font-size: 13px; color: #ddd">管理者 ・ <a href="#" style="color: #fff">ログアウト</a></p></div></header>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-start">
+<nav style="flex: 1 1 200px; max-width: 240px; background: #fff; border-right: 1px solid #ddd; padding: 16px 0; display: flex; flex-direction: column; font-size: 14px">
+<a href="#AdminDash" style="padding: 12px 24px; text-decoration: none; font-weight: 700; background: #e5e5e5">ダッシュボード</a>
+<a href="#AdminApply" style="padding: 12px 24px; text-decoration: none">応募の審査</a>
+<a href="#AdminSchools" style="padding: 12px 24px; text-decoration: none">学校の管理</a>
+<a href="#AdminRounds" style="padding: 12px 24px; text-decoration: none">寄附の回・発送</a>
+<a href="#AdminOrders" style="padding: 12px 24px; text-decoration: none">寄附（注文）一覧</a>
+<a href="#AdminThanks" style="padding: 12px 24px; text-decoration: none">お礼文</a>
+<a href="#AdminSurvey" style="padding: 12px 24px; text-decoration: none">アンケート集計</a>
+<a href="#" style="padding: 12px 24px; text-decoration: none; color: #555; border-top: 1px solid #ddd; margin-top: 8px">Shopify管理画面 ↗</a>
+</nav>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px; display: flex; flex-direction: column; gap: 24px">
+<h1 style="margin: 0; font-size: 24px">ダッシュボード</h1>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
+<div style="background: #fff; border: 2px solid #111; border-radius: 8px; padding: 20px"><p style="margin: 0; font-size: 13px; color: #555">募集中の回</p><p style="margin: 6px 0 0; font-size: 30px; font-weight: 700">[○] / 100人</p></div>
+<a href="#AdminApply" style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; text-decoration: none"><p style="margin: 0; font-size: 13px; color: #555">承認待ちの応募</p><p style="margin: 6px 0 0; font-size: 30px; font-weight: 700">[○]件</p></a>
+<a href="#AdminRounds" style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; text-decoration: none"><p style="margin: 0; font-size: 13px; color: #555">寄附先の決定待ち・発送待ち</p><p style="margin: 6px 0 0; font-size: 30px; font-weight: 700">[○]件</p></a>
+<a href="#AdminSurvey" style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; text-decoration: none"><p style="margin: 0; font-size: 13px; color: #555">アンケート未回答</p><p style="margin: 6px 0 0; font-size: 30px; font-weight: 700">[○]校</p></a>
+</div>
+<section style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 18px">やること</h2>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; font-size: 14px">
+<li style="padding: 12px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap"><span>第[○]回が100人に達しました。寄附先を決めてください</span><a href="#AdminRounds">寄附先を決める →</a></li>
+<li style="padding: 12px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap"><span>新しい応募が [○] 件あります</span><a href="#AdminApply">審査する →</a></li>
+<li style="padding: 12px 0; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap"><span>アンケートの期限が近い学校が [○] 校あります</span><a href="#AdminSurvey">確認する →</a></li>
+</ul>
+</section>
+<section style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px">
+<div><p style="margin: 0; font-size: 13px; color: #555">累計の寄附数</p><p style="margin: 4px 0 0; font-size: 22px; font-weight: 700">[○]個</p></div>
+<div><p style="margin: 0; font-size: 13px; color: #555">寄附した学校</p><p style="margin: 4px 0 0; font-size: 22px; font-weight: 700">[○]校</p></div>
+<div><p style="margin: 0; font-size: 13px; color: #555">寄附ボタンを押した割合</p><p style="margin: 4px 0 0; font-size: 22px; font-weight: 700">[○]%</p></div>
+<div><p style="margin: 0; font-size: 13px; color: #555">平均利用率</p><p style="margin: 4px 0 0; font-size: 22px; font-weight: 700">[○]%</p></div>
+</section>
+</main>
+</div>
+</div>
+</template><template id="tpl-AdminApply">
+
+<div style="width: 100%; min-height: 100vh; background: #f5f5f5">
+<header style="background: #111"><div style="padding: 14px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between"><p style="margin: 0; font-weight: 700; font-size: 17px; color: #fff">[サービス名]　企業管理</p><p style="margin: 0; font-size: 13px; color: #ddd">管理者 ・ <a href="#" style="color: #fff">ログアウト</a></p></div></header>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-start">
+<nav style="flex: 1 1 200px; max-width: 240px; background: #fff; border-right: 1px solid #ddd; padding: 16px 0; display: flex; flex-direction: column; font-size: 14px">
+<a href="#AdminDash" style="padding: 12px 24px; text-decoration: none">ダッシュボード</a>
+<a href="#AdminApply" style="padding: 12px 24px; text-decoration: none; font-weight: 700; background: #e5e5e5">応募の審査</a>
+<a href="#AdminSchools" style="padding: 12px 24px; text-decoration: none">学校の管理</a>
+<a href="#AdminRounds" style="padding: 12px 24px; text-decoration: none">寄附の回・発送</a>
+<a href="#AdminOrders" style="padding: 12px 24px; text-decoration: none">寄附（注文）一覧</a>
+<a href="#AdminThanks" style="padding: 12px 24px; text-decoration: none">お礼文</a>
+<a href="#AdminSurvey" style="padding: 12px 24px; text-decoration: none">アンケート集計</a>
+<a href="#" style="padding: 12px 24px; text-decoration: none; color: #555; border-top: 1px solid #ddd; margin-top: 8px">Shopify管理画面 ↗</a>
+</nav>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px; display: flex; flex-direction: column; gap: 24px">
+<h1 style="margin: 0; font-size: 24px">応募の審査</h1>
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<section style="flex: 1 1 360px; background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden">
+<div style="padding: 14px 16px; border-bottom: 1px solid #ddd; font-size: 14px; font-weight: 700">応募一覧</div>
+<div style="padding: 14px 16px; border-bottom: 1px solid #eee; background: #f0f0f0; display: flex; justify-content: space-between; gap: 8px; font-size: 14px"><span><strong>○○小学校</strong><br><span style="color: #555">[市町村]・応募日 [○/○]</span></span><span style="{{badge}}">{{status}}</span></div>
+<div style="padding: 14px 16px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; gap: 8px; font-size: 14px"><span><strong>○○小学校</strong><br><span style="color: #555">[市町村]・応募日 [○/○]</span></span><span style="border: 1px dashed #555; color: #555; padding: 1px 10px; border-radius: 99px; font-size: 12px; align-self: flex-start">審査待ち</span></div>
+<div style="padding: 14px 16px; display: flex; justify-content: space-between; gap: 8px; font-size: 14px"><span><strong>○○小学校</strong><br><span style="color: #555">[市町村]・応募日 [○/○]</span></span><span style="background: #111; color: #fff; padding: 2px 10px; border-radius: 99px; font-size: 12px; align-self: flex-start">承認済み</span></div>
+</section>
+<section style="flex: 2 1 420px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px"><h2 style="margin: 0; font-size: 20px">○○小学校</h2><span style="{{badge}}">{{status}}</span></div>
+<dl style="margin: 0; display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 10px 16px; font-size: 14px">
+<dt style="color: #555">所在地</dt><dd style="margin: 0">[都道府県][市町村][番地]</dd>
+<dt style="color: #555">児童数・希望学年</dt><dd style="margin: 0">[○]人・[○]年生</dd>
+<dt style="color: #555">担当の先生</dt><dd style="margin: 0">[氏名]</dd>
+<dt style="color: #555">連絡先</dt><dd style="margin: 0">[電話番号]／[メールアドレス]</dd>
+<dt style="color: #555">寄附前の利用率</dt><dd style="margin: 0">[○]%</dd>
+<dt style="color: #555">応募の理由</dt><dd style="margin: 0">[ひとこと]</dd>
+<dt style="color: #555">2つの約束</dt><dd style="margin: 0">約束1・約束2 ともに同意済み</dd>
+</dl>
+<div style="background: #f5f5f5; border-radius: 6px; padding: 12px 16px; font-size: 13px; color: #333">承認すると、学校へ学校専用ページのログイン案内が自動で送られ、順番待ちの列に入ります。</div>
+<div style="display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap">
+<button onClick="{{decline}}" style="height: 48px; padding: 0 24px; background: #fff; color: #111; border: 1px solid #999; border-radius: 6px; font-size: 15px; cursor: pointer">見送り</button>
+<button onClick="{{approve}}" style="height: 48px; padding: 0 28px; background: #111; color: #fff; border: 0; border-radius: 6px; font-size: 15px; font-weight: 700; cursor: pointer">承認する</button>
+</div>
+</section>
+</div>
+</main>
+</div>
+</div>
+</template><template id="tpl-AdminSchools">
+
+<div style="width: 100%; min-height: 100vh; background: #f5f5f5">
+<header style="background: #111"><div style="padding: 14px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between"><p style="margin: 0; font-weight: 700; font-size: 17px; color: #fff">[サービス名]　企業管理</p><p style="margin: 0; font-size: 13px; color: #ddd">管理者 ・ <a href="#" style="color: #fff">ログアウト</a></p></div></header>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-start">
+<nav style="flex: 1 1 200px; max-width: 240px; background: #fff; border-right: 1px solid #ddd; padding: 16px 0; display: flex; flex-direction: column; font-size: 14px">
+<a href="#AdminDash" style="padding: 12px 24px; text-decoration: none">ダッシュボード</a>
+<a href="#AdminApply" style="padding: 12px 24px; text-decoration: none">応募の審査</a>
+<a href="#AdminSchools" style="padding: 12px 24px; text-decoration: none; font-weight: 700; background: #e5e5e5">学校の管理</a>
+<a href="#AdminRounds" style="padding: 12px 24px; text-decoration: none">寄附の回・発送</a>
+<a href="#AdminOrders" style="padding: 12px 24px; text-decoration: none">寄附（注文）一覧</a>
+<a href="#AdminThanks" style="padding: 12px 24px; text-decoration: none">お礼文</a>
+<a href="#AdminSurvey" style="padding: 12px 24px; text-decoration: none">アンケート集計</a>
+<a href="#" style="padding: 12px 24px; text-decoration: none; color: #555; border-top: 1px solid #ddd; margin-top: 8px">Shopify管理画面 ↗</a>
+</nav>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
+<h1 style="margin: 0; font-size: 24px">学校の管理</h1>
+<button style="height: 44px; padding: 0 20px; background: #111; color: #fff; border: 0; border-radius: 6px; font-weight: 700; cursor: pointer">＋ 学校を追加</button>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<label for="q" style="position: absolute; left: -9999px">学校名で検索</label>
+<input id="q" type="search" placeholder="学校名で検索" style="height: 44px; flex: 1 1 240px; border: 1px solid #999; border-radius: 6px; padding: 0 14px; font-size: 14px; background: #fff">
+<label for="st" style="position: absolute; left: -9999px">状態で絞り込み</label>
+<select id="st" style="height: 44px; border: 1px solid #999; border-radius: 6px; padding: 0 12px; font-size: 14px; background: #fff"><option>すべての状態</option><option>順番待ち</option><option>寄附先決定</option><option>受け取り済み</option><option>一時停止</option></select>
+</div>
+<section style="background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px; min-width: 760px">
+<thead><tr style="text-align: left; color: #555; border-bottom: 1px solid #ddd"><th style="padding: 12px 16px; font-weight: 500">学校名</th><th style="padding: 12px 16px; font-weight: 500">所在地</th><th style="padding: 12px 16px; font-weight: 500">担当の先生</th><th style="padding: 12px 16px; font-weight: 500">状態</th><th style="padding: 12px 16px; font-weight: 500">寄附回数</th><th style="padding: 12px 16px; font-weight: 500">利用率</th><th style="padding: 12px 16px; font-weight: 500">操作</th></tr></thead>
+<tbody>
+<tr style="border-bottom: 1px solid #eee"><td style="padding: 12px 16px; font-weight: 700">○○小学校</td><td style="padding: 12px 16px">[市町村]</td><td style="padding: 12px 16px">[氏名]</td><td style="padding: 12px 16px"><span style="background: #111; color: #fff; padding: 2px 10px; border-radius: 99px; font-size: 12px">受け取り済み</span></td><td style="padding: 12px 16px">1回</td><td style="padding: 12px 16px">[○]%</td><td style="padding: 8px 16px"><button style="height: 36px; padding: 0 14px; background: #fff; border: 1px solid #999; border-radius: 6px; cursor: pointer">編集</button></td></tr>
+<tr style="border-bottom: 1px solid #eee"><td style="padding: 12px 16px; font-weight: 700">○○小学校</td><td style="padding: 12px 16px">[市町村]</td><td style="padding: 12px 16px">[氏名]</td><td style="padding: 12px 16px"><span style="background: #e5e5e5; padding: 2px 10px; border-radius: 99px; font-size: 12px">寄附先決定</span></td><td style="padding: 12px 16px">0回</td><td style="padding: 12px 16px; color: #555">—</td><td style="padding: 8px 16px"><button style="height: 36px; padding: 0 14px; background: #fff; border: 1px solid #999; border-radius: 6px; cursor: pointer">編集</button></td></tr>
+<tr style="border-bottom: 1px solid #eee"><td style="padding: 12px 16px; font-weight: 700">○○小学校</td><td style="padding: 12px 16px">[市町村]</td><td style="padding: 12px 16px">[氏名]</td><td style="padding: 12px 16px"><span style="border: 1px dashed #555; color: #555; padding: 1px 10px; border-radius: 99px; font-size: 12px">順番待ち（1番目）</span></td><td style="padding: 12px 16px">0回</td><td style="padding: 12px 16px; color: #555">—</td><td style="padding: 8px 16px"><button style="height: 36px; padding: 0 14px; background: #fff; border: 1px solid #999; border-radius: 6px; cursor: pointer">編集</button></td></tr>
+<tr><td style="padding: 12px 16px; font-weight: 700">○○小学校</td><td style="padding: 12px 16px">[市町村]</td><td style="padding: 12px 16px">[氏名]</td><td style="padding: 12px 16px"><span style="border: 1px solid #999; color: #555; padding: 1px 10px; border-radius: 99px; font-size: 12px">一時停止</span></td><td style="padding: 12px 16px">1回</td><td style="padding: 12px 16px; color: #555">未回答</td><td style="padding: 8px 16px"><button style="height: 36px; padding: 0 14px; background: #fff; border: 1px solid #999; border-radius: 6px; cursor: pointer">編集</button></td></tr>
+</tbody>
+</table>
+</section>
+<p style="margin: 0; font-size: 13px; color: #555">※ アンケート未回答の学校は「一時停止」にして、次回の応募を受け付けないようにできます（運用ルールは要相談）。</p>
+</main>
+</div>
+</div>
+</template><template id="tpl-AdminRounds">
+
+<div style="width: 100%; min-height: 100vh; background: #f5f5f5">
+<header style="background: #111"><div style="padding: 14px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between"><p style="margin: 0; font-weight: 700; font-size: 17px; color: #fff">[サービス名]　企業管理</p><p style="margin: 0; font-size: 13px; color: #ddd">管理者 ・ <a href="#" style="color: #fff">ログアウト</a></p></div></header>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-start">
+<nav style="flex: 1 1 200px; max-width: 240px; background: #fff; border-right: 1px solid #ddd; padding: 16px 0; display: flex; flex-direction: column; font-size: 14px">
+<a href="#AdminDash" style="padding: 12px 24px; text-decoration: none">ダッシュボード</a>
+<a href="#AdminApply" style="padding: 12px 24px; text-decoration: none">応募の審査</a>
+<a href="#AdminSchools" style="padding: 12px 24px; text-decoration: none">学校の管理</a>
+<a href="#AdminRounds" style="padding: 12px 24px; text-decoration: none; font-weight: 700; background: #e5e5e5">寄附の回・発送</a>
+<a href="#AdminOrders" style="padding: 12px 24px; text-decoration: none">寄附（注文）一覧</a>
+<a href="#AdminThanks" style="padding: 12px 24px; text-decoration: none">お礼文</a>
+<a href="#AdminSurvey" style="padding: 12px 24px; text-decoration: none">アンケート集計</a>
+<a href="#" style="padding: 12px 24px; text-decoration: none; color: #555; border-top: 1px solid #ddd; margin-top: 8px">Shopify管理画面 ↗</a>
+</nav>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px; display: flex; flex-direction: column; gap: 24px">
+<h1 style="margin: 0; font-size: 24px">寄附の回・発送</h1>
+
+<section style="background: #fff; border: 2px solid #111; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline">
+<h2 style="margin: 0; font-size: 20px">第[○]回　100 / 100人　達成</h2>
+<span style="{{badge}}">{{status}}</span>
+</div>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px">
+<li style="{{s1}}">1 寄附先を決める</li><li style="{{s2}}">2 寄附者へお知らせ</li><li style="{{s3}}">3 発送</li><li style="{{s4}}">4 学校が受け取り</li>
+</ol>
+<sc-if value="{{isPick}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+<label for="sc" style="font-size: 14px">寄附先の学校</label>
+<select id="sc" style="height: 44px; min-width: 260px; border: 1px solid #999; border-radius: 6px; padding: 0 12px; font-size: 14px; background: #fff"><option>○○小学校（順番待ち1番目）</option><option>○○小学校（順番待ち2番目）</option></select>
+<button onClick="{{decide}}" style="height: 44px; padding: 0 20px; background: #111; color: #fff; border: 0; border-radius: 6px; font-weight: 700; cursor: pointer">決定して寄附者へお知らせ</button>
+</div>
+</sc-if>
+<sc-if value="{{isShip}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
+<p style="margin: 0; font-size: 14px">寄附先：<strong>○○小学校</strong>　／　寄附者100人へお知らせ送信済み</p>
+<button onClick="{{ship}}" style="height: 44px; padding: 0 20px; background: #111; color: #fff; border: 0; border-radius: 6px; font-weight: 700; cursor: pointer">発送済みにする</button>
+</div>
+</sc-if>
+<sc-if value="{{isDone}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; font-size: 14px">寄附先：<strong>○○小学校</strong>　／　発送済み。学校の「受け取りました」を待っています。</p>
+</sc-if>
+</section>
+
+<section style="background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px; min-width: 680px">
+<thead><tr style="text-align: left; color: #555; border-bottom: 1px solid #ddd"><th style="padding: 12px 16px; font-weight: 500">回</th><th style="padding: 12px 16px; font-weight: 500">人数</th><th style="padding: 12px 16px; font-weight: 500">寄附先</th><th style="padding: 12px 16px; font-weight: 500">状態</th><th style="padding: 12px 16px; font-weight: 500">日付</th></tr></thead>
+<tbody>
+<tr style="border-bottom: 1px solid #eee"><td style="padding: 12px 16px">第[○]回</td><td style="padding: 12px 16px; font-weight: 700">[○] / 100</td><td style="padding: 12px 16px; color: #555">未定</td><td style="padding: 12px 16px"><span style="border: 1px dashed #555; color: #555; padding: 1px 10px; border-radius: 99px; font-size: 12px">募集中</span></td><td style="padding: 12px 16px">開始 [○/○]</td></tr>
+<tr style="border-bottom: 1px solid #eee"><td style="padding: 12px 16px">第[○]回</td><td style="padding: 12px 16px; font-weight: 700">100 / 100</td><td style="padding: 12px 16px">○○小学校</td><td style="padding: 12px 16px"><span style="background: #111; color: #fff; padding: 2px 10px; border-radius: 99px; font-size: 12px">受け取り済み</span></td><td style="padding: 12px 16px">受取 [○/○]</td></tr>
+<tr><td style="padding: 12px 16px">第[○]回</td><td style="padding: 12px 16px; font-weight: 700">100 / 100</td><td style="padding: 12px 16px">○○小学校</td><td style="padding: 12px 16px"><span style="background: #111; color: #fff; padding: 2px 10px; border-radius: 99px; font-size: 12px">受け取り済み</span></td><td style="padding: 12px 16px">受取 [○/○]</td></tr>
+</tbody>
+</table>
+</section>
+</main>
+</div>
+</div>
+</template><template id="tpl-AdminOrders">
+
+<div style="width: 100%; min-height: 100vh; background: #f5f5f5">
+<header style="background: #111"><div style="padding: 14px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between"><p style="margin: 0; font-weight: 700; font-size: 17px; color: #fff">[サービス名]　企業管理</p><p style="margin: 0; font-size: 13px; color: #ddd">管理者 ・ <a href="#" style="color: #fff">ログアウト</a></p></div></header>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-start">
+<nav style="flex: 1 1 200px; max-width: 240px; background: #fff; border-right: 1px solid #ddd; padding: 16px 0; display: flex; flex-direction: column; font-size: 14px">
+<a href="#AdminDash" style="padding: 12px 24px; text-decoration: none">ダッシュボード</a>
+<a href="#AdminApply" style="padding: 12px 24px; text-decoration: none">応募の審査</a>
+<a href="#AdminSchools" style="padding: 12px 24px; text-decoration: none">学校の管理</a>
+<a href="#AdminRounds" style="padding: 12px 24px; text-decoration: none">寄附の回・発送</a>
+<a href="#AdminOrders" style="padding: 12px 24px; text-decoration: none; font-weight: 700; background: #e5e5e5">寄附（注文）一覧</a>
+<a href="#AdminThanks" style="padding: 12px 24px; text-decoration: none">お礼文</a>
+<a href="#AdminSurvey" style="padding: 12px 24px; text-decoration: none">アンケート集計</a>
+<a href="#" style="padding: 12px 24px; text-decoration: none; color: #555; border-top: 1px solid #ddd; margin-top: 8px">Shopify管理画面 ↗</a>
+</nav>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
+<h1 style="margin: 0; font-size: 24px">寄附（注文）一覧</h1>
+<button style="height: 44px; padding: 0 20px; background: #fff; color: #111; border: 1px solid #999; border-radius: 6px; cursor: pointer">CSVで出力</button>
+</div>
+<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #333; line-height: 1.8">Shopifyで受けた注文が自動で反映されます。購入者の氏名・住所・メールはShopifyで管理しているため、この画面には表示しません。注文の詳細・発送・返品はShopify管理画面で確認できます。</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<label for="f" style="position: absolute; left: -9999px">寄附の有無で絞り込み</label>
+<select id="f" style="height: 44px; border: 1px solid #999; border-radius: 6px; padding: 0 12px; font-size: 14px; background: #fff"><option>すべて</option><option>寄附あり</option><option>寄附なし</option></select>
+<label for="r" style="position: absolute; left: -9999px">回で絞り込み</label>
+<select id="r" style="height: 44px; border: 1px solid #999; border-radius: 6px; padding: 0 12px; font-size: 14px; background: #fff"><option>すべての回</option><option>第[○]回（募集中）</option></select>
+</div>
+<section style="background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px; min-width: 720px">
+<thead><tr style="text-align: left; color: #555; border-bottom: 1px solid #ddd"><th style="padding: 12px 16px; font-weight: 500">注文番号</th><th style="padding: 12px 16px; font-weight: 500">日時</th><th style="padding: 12px 16px; font-weight: 500">数量</th><th style="padding: 12px 16px; font-weight: 500">寄附</th><th style="padding: 12px 16px; font-weight: 500">回</th><th style="padding: 12px 16px; font-weight: 500">状態</th><th style="padding: 12px 16px; font-weight: 500">Shopify</th></tr></thead>
+<tbody>
+<tr style="border-bottom: 1px solid #eee"><td style="padding: 12px 16px">#[○○○○]</td><td style="padding: 12px 16px">[○/○ ○:○]</td><td style="padding: 12px 16px">1</td><td style="padding: 12px 16px"><span style="background: #111; color: #fff; padding: 2px 10px; border-radius: 99px; font-size: 12px">あり</span></td><td style="padding: 12px 16px">第[○]回</td><td style="padding: 12px 16px">カウント済み</td><td style="padding: 12px 16px"><a href="#">開く ↗</a></td></tr>
+<tr style="border-bottom: 1px solid #eee"><td style="padding: 12px 16px">#[○○○○]</td><td style="padding: 12px 16px">[○/○ ○:○]</td><td style="padding: 12px 16px">2</td><td style="padding: 12px 16px"><span style="background: #111; color: #fff; padding: 2px 10px; border-radius: 99px; font-size: 12px">あり</span></td><td style="padding: 12px 16px">第[○]回</td><td style="padding: 12px 16px">カウント済み</td><td style="padding: 12px 16px"><a href="#">開く ↗</a></td></tr>
+<tr style="border-bottom: 1px solid #eee"><td style="padding: 12px 16px">#[○○○○]</td><td style="padding: 12px 16px">[○/○ ○:○]</td><td style="padding: 12px 16px">1</td><td style="padding: 12px 16px"><span style="border: 1px solid #999; color: #555; padding: 1px 10px; border-radius: 99px; font-size: 12px">なし</span></td><td style="padding: 12px 16px; color: #555">—</td><td style="padding: 12px 16px; color: #555">対象外</td><td style="padding: 12px 16px"><a href="#">開く ↗</a></td></tr>
+<tr><td style="padding: 12px 16px">#[○○○○]</td><td style="padding: 12px 16px">[○/○ ○:○]</td><td style="padding: 12px 16px">1</td><td style="padding: 12px 16px"><span style="background: #111; color: #fff; padding: 2px 10px; border-radius: 99px; font-size: 12px">あり</span></td><td style="padding: 12px 16px">第[○]回</td><td style="padding: 12px 16px">キャンセル（カウント取消）</td><td style="padding: 12px 16px"><a href="#">開く ↗</a></td></tr>
+</tbody>
+</table>
+</section>
+</main>
+</div>
+</div>
+</template><template id="tpl-AdminThanks">
+
+<div style="width: 100%; min-height: 100vh; background: #f5f5f5">
+<header style="background: #111"><div style="padding: 14px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between"><p style="margin: 0; font-weight: 700; font-size: 17px; color: #fff">[サービス名]　企業管理</p><p style="margin: 0; font-size: 13px; color: #ddd">管理者 ・ <a href="#" style="color: #fff">ログアウト</a></p></div></header>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-start">
+<nav style="flex: 1 1 200px; max-width: 240px; background: #fff; border-right: 1px solid #ddd; padding: 16px 0; display: flex; flex-direction: column; font-size: 14px">
+<a href="#AdminDash" style="padding: 12px 24px; text-decoration: none">ダッシュボード</a>
+<a href="#AdminApply" style="padding: 12px 24px; text-decoration: none">応募の審査</a>
+<a href="#AdminSchools" style="padding: 12px 24px; text-decoration: none">学校の管理</a>
+<a href="#AdminRounds" style="padding: 12px 24px; text-decoration: none">寄附の回・発送</a>
+<a href="#AdminOrders" style="padding: 12px 24px; text-decoration: none">寄附（注文）一覧</a>
+<a href="#AdminThanks" style="padding: 12px 24px; text-decoration: none; font-weight: 700; background: #e5e5e5">お礼文</a>
+<a href="#AdminSurvey" style="padding: 12px 24px; text-decoration: none">アンケート集計</a>
+<a href="#" style="padding: 12px 24px; text-decoration: none; color: #555; border-top: 1px solid #ddd; margin-top: 8px">Shopify管理画面 ↗</a>
+</nav>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
+<h1 style="margin: 0; font-size: 24px">お礼文テンプレート</h1>
+<button style="height: 44px; padding: 0 20px; background: #111; color: #fff; border: 0; border-radius: 6px; font-weight: 700; cursor: pointer">＋ 文例を追加</button>
+</div>
+<p style="margin: 0; font-size: 14px; color: #333">学校が受け取り後に選べるお礼の文です。学校が選んだ文が、その回の寄附者全員にメールで届きます。</p>
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<section style="flex: 1 1 360px; display: flex; flex-direction: column; gap: 10px">
+<div style="background: #fff; border: 2px solid #111; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-size: 13px"><strong>文例A</strong><span style="color: #555">使用 [○]回・公開中</span></div><p style="margin: 0; font-size: 14px">子どもたちが毎日使っています</p></div>
+<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-size: 13px"><strong>文例B</strong><span style="color: #555">使用 [○]回・公開中</span></div><p style="margin: 0; font-size: 14px">みんなで大切に使わせていただきます</p></div>
+<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-size: 13px"><strong>文例C</strong><span style="color: #555">使用 [○]回・公開中</span></div><p style="margin: 0; font-size: 14px">授業で紹介し、みんなで使い始めました</p></div>
+</section>
+<section style="flex: 1 1 400px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 18px">文例Aを編集</h2>
+<label for="t" style="font-size: 14px; font-weight: 500">学校に表示する文</label>
+<textarea id="t" rows="2" style="border: 1px solid #999; border-radius: 6px; padding: 12px; font-size: 15px">子どもたちが毎日使っています</textarea>
+<p style="margin: 0; font-size: 14px; font-weight: 500">寄附者に届くメールのプレビュー</p>
+<div style="background: #f5f5f5; border-radius: 6px; padding: 16px; font-size: 14px; line-height: 1.9; color: #333">件名：○○小学校からお礼が届きました<br><br>あなたの寄附が、○○小学校に届きました。<br>学校からのメッセージ：「子どもたちが毎日使っています」<br><br>3か月後に、利用状況の結果をお知らせします。<br>[サービス名]</div>
+<div style="display: flex; gap: 12px; justify-content: flex-end"><button style="height: 44px; padding: 0 20px; background: #fff; border: 1px solid #999; border-radius: 6px; cursor: pointer">非公開にする</button><button style="height: 44px; padding: 0 24px; background: #111; color: #fff; border: 0; border-radius: 6px; font-weight: 700; cursor: pointer">保存</button></div>
+</section>
+</div>
+</main>
+</div>
+</div>
+</template><template id="tpl-AdminSurvey">
+
+<div style="width: 100%; min-height: 100vh; background: #f5f5f5">
+<header style="background: #111"><div style="padding: 14px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between"><p style="margin: 0; font-weight: 700; font-size: 17px; color: #fff">[サービス名]　企業管理</p><p style="margin: 0; font-size: 13px; color: #ddd">管理者 ・ <a href="#" style="color: #fff">ログアウト</a></p></div></header>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-start">
+<nav style="flex: 1 1 200px; max-width: 240px; background: #fff; border-right: 1px solid #ddd; padding: 16px 0; display: flex; flex-direction: column; font-size: 14px">
+<a href="#AdminDash" style="padding: 12px 24px; text-decoration: none">ダッシュボード</a>
+<a href="#AdminApply" style="padding: 12px 24px; text-decoration: none">応募の審査</a>
+<a href="#AdminSchools" style="padding: 12px 24px; text-decoration: none">学校の管理</a>
+<a href="#AdminRounds" style="padding: 12px 24px; text-decoration: none">寄附の回・発送</a>
+<a href="#AdminOrders" style="padding: 12px 24px; text-decoration: none">寄附（注文）一覧</a>
+<a href="#AdminThanks" style="padding: 12px 24px; text-decoration: none">お礼文</a>
+<a href="#AdminSurvey" style="padding: 12px 24px; text-decoration: none; font-weight: 700; background: #e5e5e5">アンケート集計</a>
+<a href="#" style="padding: 12px 24px; text-decoration: none; color: #555; border-top: 1px solid #ddd; margin-top: 8px">Shopify管理画面 ↗</a>
+</nav>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
+<h1 style="margin: 0; font-size: 24px">アンケート集計</h1>
+<button style="height: 44px; padding: 0 20px; background: #fff; color: #111; border: 1px solid #999; border-radius: 6px; cursor: pointer">CSVで出力</button>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px">
+<div style="background: #fff; border: 2px solid #111; border-radius: 8px; padding: 20px"><p style="margin: 0; font-size: 13px; color: #555">平均利用率（3か月後）</p><p style="margin: 6px 0 0; font-size: 30px; font-weight: 700">[○]%</p></div>
+<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px"><p style="margin: 0; font-size: 13px; color: #555">寄附前からの変化</p><p style="margin: 6px 0 0; font-size: 30px; font-weight: 700">+[○]pt</p></div>
+<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px"><p style="margin: 0; font-size: 13px; color: #555">回答率</p><p style="margin: 6px 0 0; font-size: 30px; font-weight: 700">[○]%</p></div>
+<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px"><p style="margin: 0; font-size: 13px; color: #555">未回答</p><p style="margin: 6px 0 0; font-size: 30px; font-weight: 700">[○]校</p></div>
+</div>
+<section style="background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px; min-width: 760px">
+<thead><tr style="text-align: left; color: #555; border-bottom: 1px solid #ddd"><th style="padding: 12px 16px; font-weight: 500">学校</th><th style="padding: 12px 16px; font-weight: 500">受け取り日</th><th style="padding: 12px 16px; font-weight: 500">回答期限</th><th style="padding: 12px 16px; font-weight: 500">寄附前</th><th style="padding: 12px 16px; font-weight: 500">3か月後</th><th style="padding: 12px 16px; font-weight: 500">状態</th><th style="padding: 12px 16px; font-weight: 500">操作</th></tr></thead>
+<tbody>
+<tr style="border-bottom: 1px solid #eee"><td style="padding: 12px 16px; font-weight: 700">○○小学校</td><td style="padding: 12px 16px">[○/○]</td><td style="padding: 12px 16px">[○/○]</td><td style="padding: 12px 16px">[○]%</td><td style="padding: 12px 16px; font-weight: 700">[○]%</td><td style="padding: 12px 16px"><span style="background: #111; color: #fff; padding: 2px 10px; border-radius: 99px; font-size: 12px">回答済み</span></td><td style="padding: 8px 16px"><button style="height: 36px; padding: 0 14px; background: #fff; border: 1px solid #999; border-radius: 6px; cursor: pointer">回答を見る</button></td></tr>
+<tr style="border-bottom: 1px solid #eee"><td style="padding: 12px 16px; font-weight: 700">○○小学校</td><td style="padding: 12px 16px">[○/○]</td><td style="padding: 12px 16px">[○/○]</td><td style="padding: 12px 16px">[○]%</td><td style="padding: 12px 16px; color: #555">—</td><td style="padding: 12px 16px"><span style="background: #e5e5e5; padding: 2px 10px; border-radius: 99px; font-size: 12px">期限まで7日</span></td><td style="padding: 8px 16px"><button style="height: 36px; padding: 0 14px; background: #111; color: #fff; border: 0; border-radius: 6px; cursor: pointer">お知らせを送る</button></td></tr>
+<tr><td style="padding: 12px 16px; font-weight: 700">○○小学校</td><td style="padding: 12px 16px">[○/○]</td><td style="padding: 12px 16px">[○/○]</td><td style="padding: 12px 16px">[○]%</td><td style="padding: 12px 16px; color: #555">—</td><td style="padding: 12px 16px"><span style="border: 1px dashed #555; color: #555; padding: 1px 10px; border-radius: 99px; font-size: 12px">回答前（受け取りから3か月未満）</span></td><td style="padding: 12px 16px; color: #555">—</td></tr>
+</tbody>
+</table>
+</section>
+<p style="margin: 0; font-size: 13px; color: #555">※ 期限切れの学校への自動催促はオプション機能です。標準では「お知らせを送る」ボタンで手動送信します。</p>
+</main>
+</div>
+</div>
+</template>
+<script>
+class DCLogic {
+  constructor(props) { this.props = props || {}; this.state = {}; }
+  setState(s) { Object.assign(this.state, s); this._render && this._render(); }
+  forceUpdate() { this._render && this._render(); }
+}
+const S = {};
+S["Main"] = (function(){ 
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+
+return Component; })();
+S["Howto"] = (function(){ 
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+
+return Component; })();
+S["Buy"] = (function(){ 
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { qty: 1, give: false };
+}
+renderVals() {
+const qty = this.state.qty;
+const give = this.state.give;
+return {
+give: give,
+toggle: () => this.setState({ give: !give }),
+price: '[価格]円',
+summary: give ? 'あなたに' + qty + '個／子どもたちへの寄附 ' + qty + '個' : 'あなたに' + qty + '個',
+boxStyle: 'display: flex; gap: 14px; align-items: flex-start; text-align: left; padding: 18px; border-radius: 8px; font-family: inherit; color: #111; cursor: pointer; ' + (give ? 'border: 2px solid #111; background: #f5f5f5' : 'border: 1px dashed #999; background: #fff'),
+checkStyle: 'width: 24px; height: 24px; flex: 0 0 24px; margin-top: 2px; border-radius: 4px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; ' + (give ? 'background: #111; border: 2px solid #111' : 'background: #fff; border: 2px solid #999'),
+qty: qty,
+inc: () => this.setState({ qty: Math.min(qty + 1, 10) }),
+dec: () => this.setState({ qty: Math.max(qty - 1, 1) })
+};
+}
+}
+
+return Component; })();
+S["Cart"] = (function(){ 
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+
+return Component; })();
+S["Thanks"] = (function(){ 
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+
+return Component; })();
+S["Schools"] = (function(){ 
+class Component extends DCLogic {
+renderVals() {
+const base = 'border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 16px; background: #fff;';
+const pill = 'padding: 2px 10px; border-radius: 99px; font-size: 12px; white-space: nowrap; ';
+const badge = { done: pill + 'background: #111; color: #fff', sent: pill + 'border: 1px solid #111', fixed: pill + 'background: #e5e5e5', wait: pill + 'border: 1px dashed #555; color: #555' };
+const rows = [
+['○○小学校', '[都道府県] [市町村]', 'done', '受け取り済み', '100個', '[○月○日]', '[○]%'],
+['○○小学校', '[都道府県] [市町村]', 'done', '受け取り済み', '100個', '[○月○日]', '回答待ち'],
+['○○小学校', '[都道府県] [市町村]', 'sent', '発送済み', '100個', '—', '—'],
+['○○小学校', '[都道府県] [市町村]', 'fixed', '寄附先決定', '100個', '—', '—'],
+['○○小学校', '[都道府県] [市町村]', 'wait', '承認済み・順番待ち', '—', '—', '—'],
+['○○小学校', '[都道府県] [市町村]', 'wait', '承認済み・順番待ち', '—', '—', '—']
+];
+return {
+schools: rows.map((r) => ({
+name: r[0], area: r[1], status: r[3], count: r[4], date: r[5], rate: r[6],
+card: base + (r[2] === 'done' ? ' border: 2px solid #111;' : ' border: 1px solid #ddd;'),
+badge: badge[r[2]]
+}))
+};
+}
+}
+
+return Component; })();
+S["Result"] = (function(){ 
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+
+return Component; })();
+S["Apply"] = (function(){ 
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+
+return Component; })();
+S["ApplyDone"] = (function(){ 
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+
+return Component; })();
+S["SchoolLogin"] = (function(){ 
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+
+return Component; })();
+S["School"] = (function(){ 
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { step: 1, received: false, pick: 'A', sent: false };
+}
+renderVals() {
+const s = this.state;
+const tab = (n) => 'height: 52px; border-radius: 6px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; ' + (s.step === n ? 'background: #111; color: #fff; border: 2px solid #111' : 'background: #f0f0f0; color: #111; border: 2px solid #f0f0f0');
+const texts = [['A', '文例A：子どもたちが毎日使っています'], ['B', '文例B：みんなで大切に使わせていただきます'], ['C', '文例C：授業で紹介し、みんなで使い始めました']];
+return {
+tab1: tab(1), tab2: tab(2), tab3: tab(3),
+go1: () => this.setState({ step: 1 }),
+go2: () => this.setState({ step: 2 }),
+go3: () => this.setState({ step: 3 }),
+isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3,
+received: s.received, notReceived: !s.received,
+receive: () => this.setState({ received: true }),
+msgs: texts.map((t) => ({
+text: t[1],
+pick: () => this.setState({ pick: t[0], sent: false }),
+style: 'display: flex; gap: 12px; align-items: center; text-align: left; padding: 14px 16px; min-height: 44px; border-radius: 6px; background: #fff; font-size: 15px; font-family: inherit; color: #111; cursor: pointer; ' + (s.pick === t[0] ? 'border: 2px solid #111' : 'border: 1px solid #ccc'),
+dot: 'width: 18px; height: 18px; border-radius: 50%; flex: 0 0 18px; box-sizing: border-box; ' + (s.pick === t[0] ? 'background: #111; border: 4px solid #111' : 'border: 2px solid #999')
+})),
+send: () => this.setState({ sent: true }),
+sendLabel: s.sent ? '送信しました' : 'この文で送る',
+histReceive: s.received ? '受け取り済み' : '未',
+histThanks: s.sent ? '送信済み' : '未'
+};
+}
+}
+
+return Component; })();
+S["AdminDash"] = (function(){ 
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+
+return Component; })();
+S["AdminApply"] = (function(){ 
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { st: 'wait' };
+}
+renderVals() {
+const pill = 'padding: 2px 10px; border-radius: 99px; font-size: 12px; align-self: flex-start; white-space: nowrap; ';
+const map = {
+wait: ['審査待ち', pill + 'border: 1px dashed #555; color: #555'],
+ok: ['承認済み', pill + 'background: #111; color: #fff'],
+ng: ['見送り', pill + 'background: #e5e5e5']
+};
+const cur = map[this.state.st];
+return {
+status: cur[0], badge: cur[1],
+approve: () => this.setState({ st: 'ok' }),
+decline: () => this.setState({ st: 'ng' })
+};
+}
+}
+
+return Component; })();
+S["AdminSchools"] = (function(){ 
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+
+return Component; })();
+S["AdminRounds"] = (function(){ 
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { stage: 0 };
+}
+renderVals() {
+const st = this.state.stage;
+const on = 'padding: 4px 12px; border-radius: 99px; background: #111; color: #fff';
+const off = 'padding: 3px 11px; border-radius: 99px; border: 1px solid #bbb; color: #555';
+const pill = 'padding: 2px 10px; border-radius: 99px; font-size: 12px; white-space: nowrap; ';
+const labels = [['寄附先の決定待ち', pill + 'border: 1px dashed #555; color: #555'], ['発送待ち', pill + 'background: #e5e5e5'], ['発送済み', pill + 'border: 1px solid #111']];
+return {
+status: labels[st][0], badge: labels[st][1],
+s1: st >= 0 ? on : off, s2: st >= 1 ? on : off, s3: st >= 2 ? on : off, s4: off,
+isPick: st === 0, isShip: st === 1, isDone: st === 2,
+decide: () => this.setState({ stage: 1 }),
+ship: () => this.setState({ stage: 2 })
+};
+}
+}
+
+return Component; })();
+S["AdminOrders"] = (function(){ 
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+
+return Component; })();
+S["AdminThanks"] = (function(){ 
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+
+return Component; })();
+S["AdminSurvey"] = (function(){ 
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+
+return Component; })();
+const HOLE = /\{\{\s*([^}]+?)\s*\}\}/g;
+function look(ctx, p) {
+  p = p.trim();
+  if (p === 'true') return true;
+  if (p === 'false') return false;
+  return p.split('.').reduce((o, k) => (o == null ? undefined : o[k]), ctx);
+}
+function render(node, ctx, out) {
+  if (node.nodeType === 3) {
+    out.appendChild(document.createTextNode(node.textContent.replace(HOLE, (m, p) => { const v = look(ctx, p); return v == null ? '' : v; })));
+    return;
+  }
+  if (node.nodeType !== 1) return;
+  const tag = node.tagName.toLowerCase();
+  if (tag === 'sc-if') {
+    const m = /\{\{\s*([^}]+?)\s*\}\}/.exec(node.getAttribute('value') || '');
+    if (m && look(ctx, m[1])) node.childNodes.forEach(c => render(c, ctx, out));
+    return;
+  }
+  if (tag === 'sc-for') {
+    const m = /\{\{\s*([^}]+?)\s*\}\}/.exec(node.getAttribute('list') || '');
+    const as = node.getAttribute('as') || 'item';
+    (m ? look(ctx, m[1]) || [] : []).forEach((it, i) => {
+      const c2 = Object.create(ctx); c2[as] = it; c2.$index = i;
+      node.childNodes.forEach(c => render(c, c2, out));
+    });
+    return;
+  }
+  const el = node.cloneNode(false);
+  for (const a of Array.from(node.attributes)) {
+    if (a.name.startsWith('hint-')) { el.removeAttribute(a.name); continue; }
+    if (!a.value.includes('{{')) continue;
+    const whole = /^\{\{\s*([^}]+?)\s*\}\}$/.exec(a.value);
+    if (a.name.startsWith('on')) {
+      el.removeAttribute(a.name);
+      const fn = whole ? look(ctx, whole[1]) : null;
+      if (typeof fn === 'function') el.addEventListener(a.name.slice(2), fn);
+      continue;
+    }
+    const v = whole ? look(ctx, whole[1]) : a.value.replace(HOLE, (m, p) => { const x = look(ctx, p); return x == null ? '' : x; });
+    el.setAttribute(a.name, v == null ? '' : String(v));
+  }
+  node.childNodes.forEach(c => render(c, ctx, el));
+  out.appendChild(el);
+}
+const app = document.getElementById('app');
+let current = null;
+function show(name) {
+  const tpl = document.getElementById('tpl-' + name);
+  if (!tpl) return false;
+  current = name;
+  const inst = new S[name]({});
+  inst._render = () => {
+    app.innerHTML = '';
+    const ctx = inst.renderVals ? inst.renderVals() : {};
+    tpl.content.childNodes.forEach(c => render(c, ctx, app));
+  };
+  inst._render();
+  document.querySelectorAll('.mock-menu a').forEach(a => a.classList.toggle('current', a.getAttribute('href') === '#' + name));
+  document.querySelector('.mock-menu').classList.remove('open');
+  window.scrollTo(0, 0);
+  return true;
+}
+function route() {
+  const h = decodeURIComponent(location.hash.slice(1));
+  if (h && show(h)) return;
+  if (!current) show("Main");
+  const target = h && document.getElementById(h);
+  if (target) target.scrollIntoView({ behavior: 'smooth' });
+}
+window.addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>
